@@ -1,19 +1,31 @@
 package home.java.spark;
 
+import home.java.spark.services.PopularWordService;
+import org.apache.spark.api.java.JavaRDD;
+import org.apache.spark.api.java.JavaSparkContext;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Arrays;
+import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = Application.class)
 public class ApplicationTests {
 
-	@Test
-	public void contextLoads() {
-	}
+    @Autowired
+    private JavaSparkContext sc;
+    @Autowired
+    private PopularWordService popularWordService;
 
+    @Test
+    public void contextLoads() {
+        JavaRDD<String> rdd = sc.parallelize(Arrays.asList("java", "java", "java", "scala", "groovy", "groovy"));
+        List<String> topWords = popularWordService.topXWords(rdd, 1);
+        Assert.assertEquals("java", topWords.get(0));
+    }
 }

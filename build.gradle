@@ -24,8 +24,10 @@ repositories {
 
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter')
-	compile group: 'org.apache.spark', name: 'spark-core_2.10', version: '1.6.2'
-
+	compile('org.springframework.boot:spring-boot-starter'){
+		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+	}
+	compile (group: 'org.apache.spark', name: 'spark-core_2.10', version: '1.6.2')
+//	compile ('org.springframework.boot:spring-boot-starter-validation')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
