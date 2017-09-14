@@ -1,6 +1,6 @@
-package home.java.spark;
+package home.spark;
 
-import home.java.spark.services.PopularWordService;
+import home.spark.services.PopularWordService;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.junit.Assert;
