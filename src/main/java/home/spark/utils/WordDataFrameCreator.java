@@ -20,7 +20,6 @@ public class WordDataFrameCreator {
 
     public DataFrame create(String pathToFile) {
         JavaRDD<Row> rowJavaRDD = sc.textFile(pathToFile)
-                .map(String::toLowerCase)
                 .flatMap(WordsUtil::trimWord)
                 .map(RowFactory::create);
         return sqlContext.createDataFrame(rowJavaRDD, DataTypes.createStructType(new StructField[]{
