@@ -8,6 +8,7 @@ import org.apache.spark.sql.RowFactory;
 import org.apache.spark.sql.SQLContext;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
+import org.apache.spark.sql.types.StructType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,8 +23,12 @@ public class WordDataFrameCreator {
         JavaRDD<Row> rowJavaRDD = sc.textFile(pathToFile)
                 .flatMap(WordsUtil::trimWord)
                 .map(RowFactory::create);
-        return sqlContext.createDataFrame(rowJavaRDD, DataTypes.createStructType(new StructField[]{
+        return sqlContext.createDataFrame(rowJavaRDD, dataFrameStructure());
+    }
+
+    public static StructType dataFrameStructure() {
+        return DataTypes.createStructType(new StructField[]{
                 DataTypes.createStructField("words", DataTypes.StringType, true)
-        }));
+        });
     }
 }
