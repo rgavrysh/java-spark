@@ -1,13 +1,18 @@
 buildscript {
-	ext {
-		springBootVersion = '1.5.6.RELEASE'
-	}
-	repositories {
-		mavenCentral()
-	}
-	dependencies {
-		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-	}
+    ext {
+        springBootVersion = '1.5.7.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+configurations.all {
+    exclude module: 'slf4j-log4j12'
+    exclude module: 'javax.servlet'
 }
 
 apply plugin: 'java'
@@ -19,18 +24,21 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
-
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter')
-//			{
-//		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-//	}
-	compile (group: 'org.apache.spark', name: 'spark-core_2.10', version: '1.6.2'){
-		exclude group: 'org.slf4j', module: 'slf4j-log4j12'
-	}
-//	compile ('org.springframework.boot:spring-boot-starter-validation')
-	testCompile('org.springframework.boot:spring-boot-starter-test')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    compile(group: 'org.apache.spark', name: 'spark-core_2.10', version: '1.6.2')
+    compile(group: 'org.apache.spark', name: 'spark-sql_2.10', version: '1.6.2')
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+
+}
+jar {
+    baseName = 'java-spark'
+    version = '1.0-SNAPSHOT'
+}
+
+bootRun {
+    jvmArgs = ['-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5005']
 }
